@@ -1,6 +1,6 @@
 # Probabilistic and Reconstruction-based Competency Estimation (PaRCE)
 
-This is the codebase for the paper titled "PaRCE: Probabilisitc and Reconstruction-based Competency Estimation for CNN-based Image Classification," which was submitted to the 2025 IEEE / CVF Computer Vision and Pattern Recognition Conference (CVPR). This README describes how to reproduce the results achieved in this paper. 
+This is the codebase for the paper titled "PaRCE: Probabilisitc and Reconstruction-based Competency Estimation for CNN-based Image Classification," which was submitted to the 2025 IEEE / CVF Computer Vision and Pattern Recognition Conference (CVPR). This README describes how to reproduce the results achieved in this paper. Note that most of the steps listed here can be skipped by downloading the saved [datasets](https://drive.google.com/drive/folders/14-MN0aemA_ebeMs2yjwZTBNKQ65Om6vM?usp=share_link) and trained [models](https://drive.google.com/drive/folders/1bv_5zA95u5yGyVChOiKOROiICScUrPBh?usp=share_link) provided in our Google Drive [folder](https://drive.google.com/drive/folders/1_oob1W8P_NH8YmVQNqvRDHeDdVz_FVWv?usp=share_link).
 
 ## 0) Set Up Codebase
 
