@@ -11,14 +11,13 @@ import torch.nn.functional as F
 from tqdm import tqdm
 
 import pytorch_ood.detector as oodd
-import anomalib.models as models
 import anomalib.data.utils as utils
 
 from src.networks.model import NeuralNet
 from src.datasets.setup_dataloader import setup_loader
 
 ALL_OVERALL = ['parce', 'softmax', 'dropout', 'ensemble', 'temperature', 'kl', 'entropy', 'openmax', 'energy', 'odin', 'mahalanobis', 'knn', 'dice']
-# ALL_OVERALL = ['parce', 'softmax', 'dropout', 'ensemble', 'temperature', 'kl', 'entropy', 'openmax', 'energy', 'odin', 'mahalanobis', 'vim', 'knn', 'she', 'dice', 'ganomaly']
+# ALL_OVERALL = ['parce', 'softmax', 'dropout', 'ensemble', 'temperature', 'kl', 'entropy', 'openmax', 'energy', 'odin', 'mahalanobis', 'vim', 'knn', 'she', 'dice']
 
 class Detector:
 
@@ -120,17 +119,17 @@ class Ensemble(Detector):
 
 class Temperature(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'Temperature Scaling'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Determine the optimal temperature value
             self.estimator = oodd.TemperatureScaling(model)
             outputs, labels = [], []
             for X, y in dataloader:
-                out = model(X.to(device))
+                out = model(X)
                 outputs.append(out)
                 labels.append(y)
             outputs = torch.vstack(outputs)
@@ -152,17 +151,17 @@ class Temperature(Detector):
 
 class KLMatching(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'KL-Matching'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Estimate typical distributions for each class
             self.estimator = oodd.KLMatching(model)
             outputs, labels = [], []
             for X, y in dataloader:
-                out = model(X.to(device))
+                out = model(X)
                 outputs.append(out)
                 labels.append(y)
             outputs = torch.vstack(outputs)
@@ -194,17 +193,17 @@ class Entropy(Detector):
 
 class OpenMax(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'OpenMax'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Estimate typical distributions for each class
             self.estimator = oodd.OpenMax(model)
             outputs, labels = [], []
             for X, y in dataloader:
-                out = model(X.to(device))
+                out = model(X)
                 outputs.append(out)
                 labels.append(y)
             outputs = torch.vstack(outputs).detach()
@@ -245,10 +244,10 @@ class ODIN(Detector):
 
 class Mahalanobis(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'Mahalanobis Distance'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Get feature extractor from model
@@ -260,7 +259,7 @@ class Mahalanobis(Detector):
             self.estimator = oodd.Mahalanobis(feature_extractor)
             features, labels = [], []
             for X, y in dataloader:
-                z = model.get_feature_vector(X.to(device))
+                z = model.get_feature_vector(X)
                 features.append(z)
                 labels.append(y)
             features = torch.vstack(features).detach()
@@ -281,10 +280,10 @@ class Mahalanobis(Detector):
 
 class ViM(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'Virtual Logit Matching'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Get feature extractor from model
@@ -301,7 +300,7 @@ class ViM(Detector):
             self.estimator = oodd.ViM(feature_extractor, d, W, b)
             features, labels = [], []
             for X, y in dataloader:
-                z = model.get_feature_vector(X.to(device))
+                z = model.get_feature_vector(X)
                 features.append(z)
                 labels.append(y)
             features = torch.vstack(features).detach()
@@ -322,10 +321,10 @@ class ViM(Detector):
 
 class kNN(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'k Nearest Neighbor'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Get feature extractor from model
@@ -337,7 +336,7 @@ class kNN(Detector):
             self.estimator = oodd.KNN(feature_extractor)
             features, labels = [], []
             for X, y in dataloader:
-                z = model.get_feature_vector(X.to(device))
+                z = model.get_feature_vector(X)
                 features.append(z)
                 labels.append(y)
             features = torch.vstack(features).detach()
@@ -358,10 +357,10 @@ class kNN(Detector):
 
 class SHE(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'Simplified Hopfield Energy'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Get feature extractor and classifier from model
@@ -377,7 +376,7 @@ class SHE(Detector):
             self.estimator = oodd.SHE(feature_extractor, classifier)
             features, labels = [], []
             for X, y in dataloader:
-                z = model.get_feature_vector(X.to(device))
+                z = model.get_feature_vector(X)
                 features.append(z)
                 labels.append(y)
             features = torch.vstack(features).detach()
@@ -398,10 +397,10 @@ class SHE(Detector):
 
 class DICE(Detector):
 
-    def __init__(self, model, dataloader, filename=None, device):
+    def __init__(self, model, dataloader, filename=None):
         self.name = 'DICE'
 
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             # Get feature extractor from model
@@ -417,7 +416,7 @@ class DICE(Detector):
             self.estimator = oodd.DICE(feature_extractor, W, b, p=0.7)
             features, labels = [], []
             for X, y in dataloader:
-                z = model.get_feature_vector(X.to(device))
+                z = model.get_feature_vector(X)
                 features.append(z)
                 labels.append(y)
             features = torch.vstack(features).detach()
@@ -437,85 +436,7 @@ class DICE(Detector):
         scores = self.estimator.predict(inputs)
         return -scores.detach().numpy()
 
-class GANomaly(Detector):
-    
-    def __init__(self, dataloader, epochs, filename=None, device):
-        self.name = 'GANomaly'
-
-        if os.path.isfile(filename):
-            self.estimator = pickle.load(open(filename, "rb"))
-        else:
-            # Initialize GANomaly model
-            self.estimator = models.ganomaly.torch_model.GanomalyModel(
-                input_size=(224,224),
-                num_input_channels=3,
-                n_features=64,
-                latent_vec_size=100,
-                extra_layers=0,
-                add_final_conv_layer=True,
-            )
-
-            # Set optimization parameters
-            generator_loss = models.ganomaly.loss.GeneratorLoss(1, 50, 1)
-            discriminator_loss = models.ganomaly.loss.DiscriminatorLoss()
-            d_opt = torch.optim.Adam(
-                self.estimator.discriminator.parameters(),
-                lr=0.0002, betas=(0.5, 0.999),
-            )
-            g_opt = torch.optim.Adam(
-                self.estimator.generator.parameters(),
-                lr=0.0002, betas=(0.5, 0.999),
-            )
-
-            # Train the GAN model
-            for t in tqdm(range(epochs)):
-                for X, y in dataloader:
-                    # forward pass
-                    inputs = F.interpolate(X.to(device), size=(224, 224))
-                    padded, fake, latent_i, latent_o = self.estimator(inputs)
-                    pred_real, _ = self.estimator.discriminator(padded)
-
-                    # generator update
-                    pred_fake, _ = self.estimator.discriminator(fake)
-                    g_loss = generator_loss(latent_i, latent_o, padded, fake, pred_real, pred_fake)
-                    g_opt.zero_grad()
-                    g_loss.backward(retain_graph=True)
-                    g_opt.step()
-
-                    # discrimator update
-                    pred_fake, _ = self.estimator.discriminator(fake.detach())
-                    d_loss = discriminator_loss(pred_real, pred_fake)
-                    d_opt.zero_grad()
-                    d_loss.backward()
-                    d_opt.step()
-            
-            try:
-                folder = os.path.dirname(filename)
-                if not os.path.exists(folder):
-                    os.makedirs(folder)
-                pickle.dump(self.estimator, open(filename, "wb"))
-            except:
-                print('Warning: Trained {} model was not saved.'.format(self.name))
-
-
-        # Set min and max scores for normalization
-        self.estimator.training = False
-        self.min_score = torch.tensor(float("inf"), dtype=torch.float32)
-        self.max_score = torch.tensor(float("-inf"), dtype=torch.float32)
-        for X, y in dataloader:
-            inputs = F.interpolate(X, size=(224, 224))
-            scores = self.estimator(inputs)
-            self.max_score = max(self.max_score, torch.max(scores))
-            self.min_score = min(self.min_score, torch.min(scores))
-
-    def comp_scores(self, inputs, outputs):
-        batch, _, height, width = inputs.size()
-        inputs = F.interpolate(inputs, size=(224, 224))
-        scores = self.estimator(inputs)
-        scores = (scores - self.min_score) / (self.max_score - self.min_score)
-        return -scores.detach().numpy()
-  
-def load_estimator(method, model=None, model_dir=None, decoder_dir=None, test_data=None, save_file=None, device='cpu'):
+def load_estimator(method, model=None, model_dir=None, decoder_dir=None, test_data=None, save_file=None):
 
     if method == 'parce':
         file = os.path.join(decoder_dir, 'parce.p')
@@ -532,18 +453,18 @@ def load_estimator(method, model=None, model_dir=None, decoder_dir=None, test_da
 
     elif method == 'temperature':
         train_loader = setup_loader(test_data, val=True)
-        estimator = Temperature(model, train_loader, save_file, device)
+        estimator = Temperature(model, train_loader, save_file)
 
     elif method == 'kl':
         train_loader = setup_loader(test_data, val=True)
-        estimator = KLMatching(model, train_loader, save_file, device)
+        estimator = KLMatching(model, train_loader, save_file)
 
     elif method == 'entropy':
         estimator = Entropy(model)
 
     elif method == 'openmax':
         train_loader = setup_loader(test_data, val=True)
-        estimator = OpenMax(model, train_loader, save_file, device)
+        estimator = OpenMax(model, train_loader, save_file)
 
     elif method == 'energy':
         estimator = Energy(model)
@@ -553,28 +474,24 @@ def load_estimator(method, model=None, model_dir=None, decoder_dir=None, test_da
 
     elif method == 'mahalanobis':
         train_loader = setup_loader(test_data, val=True)
-        estimator = Mahalanobis(model, train_loader, save_file, device)
+        estimator = Mahalanobis(model, train_loader, save_file)
 
     elif method == 'vim':
         train_loader = setup_loader(test_data, val=True)
-        estimator = ViM(model, train_loader, save_file, device)
+        estimator = ViM(model, train_loader, save_file)
 
     elif method == 'knn':
         train_loader = setup_loader(test_data, val=True)
-        estimator = kNN(model, train_loader, save_file, device)
+        estimator = kNN(model, train_loader, save_file)
 
     elif method == 'she':
         train_loader = setup_loader(test_data, val=True)
-        estimator = SHE(model, train_loader, save_file, device)
+        estimator = SHE(model, train_loader, save_file)
 
     elif method == 'dice':
         train_loader = setup_loader(test_data, val=True)
-        estimator = DICE(model, train_loader, save_file, device)
+        estimator = DICE(model, train_loader, save_file)
 
-    elif method == 'ganomaly':
-        train_loader = setup_loader(test_data, val=True)
-        estimator = GANomaly(train_loader, 10, save_file)
-    
     else:
         raise NotImplementedError('Unknown Method for Competency Estimation')
     

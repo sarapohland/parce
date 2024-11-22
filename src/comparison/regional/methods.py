@@ -11,7 +11,8 @@ import anomalib.data.utils as utils
 
 from src.datasets.setup_dataloader import setup_loader
 
-ALL_REGIONAL = ['parce', 'draem', 'fastflow', 'padim', 'patchcore', 'reverse', 'rkde', 'stfpm', 'ganomaly']
+ALL_REGIONAL = ['parce', 'draem', 'fastflow', 'padim', 'patchcore', 'reverse', 'stfpm', 'ganomaly']
+# ALL_REGIONAL = ['parce', 'draem', 'fastflow', 'padim', 'patchcore', 'reverse', 'rkde', 'stfpm', 'ganomaly']
 
 class Detector:
 
@@ -23,7 +24,7 @@ class DRAEM(Detector):
     
     def __init__(self, dataloader, epochs, filename=None):
         self.name = 'DRAEM'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.draem.torch_model.DraemModel(sspcab=False)
@@ -63,7 +64,7 @@ class FastFlow(Detector):
     
     def __init__(self, dataloader, epochs, filename=None):
         self.name = 'Fast Flow'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.fastflow.torch_model.FastflowModel(
@@ -110,7 +111,7 @@ class PaDiM(Detector):
     
     def __init__(self, dataloader, filename=None):
         self.name = 'PaDiM'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.padim.torch_model.PadimModel(
@@ -148,7 +149,7 @@ class PatchCore(Detector):
     
     def __init__(self, dataloader, filename=None):
         self.name = 'PatchCore'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.patchcore.torch_model.PatchcoreModel(
@@ -185,7 +186,7 @@ class Reverse(Detector):
     
     def __init__(self, dataloader, epochs, filename=None):
         self.name = 'Reverse Distillation'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.reverse_distillation.torch_model.ReverseDistillationModel(
@@ -231,7 +232,7 @@ class RKDE(Detector):
     
     def __init__(self, dataloader, filename=None):
         self.name = 'Region-Based KDE'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.rkde.torch_model.RkdeModel(
@@ -280,7 +281,7 @@ class STFPM(Detector):
     
     def __init__(self, dataloader, epochs, filename=None):
         self.name = 'Student-Teacher Feature Pyramid Matching'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.stfpm.torch_model.STFPMModel(
@@ -324,7 +325,7 @@ class GANomaly(Detector):
     
     def __init__(self, dataloader, epochs, filename=None):
         self.name = 'GANomaly'
-        if os.path.isfile(filename):
+        if filename is not None and os.path.isfile(filename):
             self.estimator = pickle.load(open(filename, "rb"))
         else:
             self.estimator = models.ganomaly.torch_model.GanomalyModel(

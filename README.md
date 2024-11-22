@@ -119,7 +119,7 @@ The argument test_data is used to indicate which dataset should be used to evalu
 
 ### 3a. Download the overall competency model files
 
-If you have not done so already, download the [lunar](https://zenodo.org/records/14117660?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjQ0ZjA3Yjc3LTkyOTEtNDU0Yi05YjkzLWU0M2JkZjUxYTEyZSIsImRhdGEiOnt9LCJyYW5kb20iOiIxMTYwOTY0NmEzY2UyOWE2MTUxMGMxNzIyNDliNzhmYiJ9.AEOqTQwzStDNwMVXWAiImxCXGvuOy3CNmgWoEGW3rlA7uSsSd2wFNkYrc4flVHDvcmrKLimaURupmd26DzaZPA), [speed](https://zenodo.org/records/14117780?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjlhNGQ1ZmZhLWU4YzEtNDU4OS05NGFlLTk4MDZmYzY0ODZiNSIsImRhdGEiOnt9LCJyYW5kb20iOiJjZGFmMTA3MTA0YTFjODQ4ZjAxYTM0MTc1ZWJkMmRkMSJ9.T_jsMnKIgQOKSxsfluK9Qmo3L6jBHpS-KtiLV8SoFTMbUngVpoEF-BwkXyHD_wOZeiN-zr1h3fURQobbmD8kMA), and [pavilion](https://zenodo.org/records/14117974?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImUyNGM4YThhLTM2YjktNDY3Mi1iMjJmLTBlZTJlZmVhNWM1NyIsImRhdGEiOnt9LCJyYW5kb20iOiJmY2ViYjA0NGQ2Y2NmZDc4MmY5MTkyMzU0OGRkMmVkMiJ9.KoR-d-bJKfyRW0bEyEC5bdrmKwCfyHGEKDtFnbQx-QTBON_AV7_hQ2AKFnkflyWpqOiRkBb8-mWzjvsMYbROfQ) models through the provided links. Create a folder called `models` in the main directory (`parce`) and unzip each of the downloaded files in this folder. You should have three subfolders (`lunar`, `speed`, and `pavilion`) that each contain three zip files (`classify.zip`, `reconstruct.zip`, and `inpaint.zip`). For this step, you need the files provided in `reconstruct.zip`. The trained overall competency estimators used in the paper are saved in files called `parce.p` in these reconstruction folders. If you want to modify the configurations to train new models, go through the remaining steps in this section. To evaluate the reconstruction model, see substep 3e. To evaluate the overall competency estimator, see 3g. To visualize examples of overall model competency estimates, see substep 3h. Otherwise, you can skip to step 4. 
+If you have not done so already, download the [lunar](https://zenodo.org/records/14117660?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjQ0ZjA3Yjc3LTkyOTEtNDU0Yi05YjkzLWU0M2JkZjUxYTEyZSIsImRhdGEiOnt9LCJyYW5kb20iOiIxMTYwOTY0NmEzY2UyOWE2MTUxMGMxNzIyNDliNzhmYiJ9.AEOqTQwzStDNwMVXWAiImxCXGvuOy3CNmgWoEGW3rlA7uSsSd2wFNkYrc4flVHDvcmrKLimaURupmd26DzaZPA), [speed](https://zenodo.org/records/14117780?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjlhNGQ1ZmZhLWU4YzEtNDU4OS05NGFlLTk4MDZmYzY0ODZiNSIsImRhdGEiOnt9LCJyYW5kb20iOiJjZGFmMTA3MTA0YTFjODQ4ZjAxYTM0MTc1ZWJkMmRkMSJ9.T_jsMnKIgQOKSxsfluK9Qmo3L6jBHpS-KtiLV8SoFTMbUngVpoEF-BwkXyHD_wOZeiN-zr1h3fURQobbmD8kMA), and [pavilion](https://zenodo.org/records/14117974?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImUyNGM4YThhLTM2YjktNDY3Mi1iMjJmLTBlZTJlZmVhNWM1NyIsImRhdGEiOnt9LCJyYW5kb20iOiJmY2ViYjA0NGQ2Y2NmZDc4MmY5MTkyMzU0OGRkMmVkMiJ9.KoR-d-bJKfyRW0bEyEC5bdrmKwCfyHGEKDtFnbQx-QTBON_AV7_hQ2AKFnkflyWpqOiRkBb8-mWzjvsMYbROfQ) models through the provided links. Create a folder called `models` in the main directory (`parce`) and unzip each of the downloaded files in this folder. You should have three subfolders (`lunar`, `speed`, and `pavilion`) that each contain three zip files (`classify.zip`, `reconstruct.zip`, and `inpaint.zip`). For this step, you need the files provided in `classify.zip` and `reconstruct.zip`. The trained overall competency estimators used in the paper are saved in files called `parce.p` in these reconstruction folders. If you want to modify the configurations to train new models, go through the remaining steps in this section. To evaluate the reconstruction model, see substep 3e. To evaluate the overall competency estimator, see 3g. To visualize examples of overall model competency estimates, see substep 3h. Otherwise, you can skip to step 4. 
 
 ### 3b. Define the reconstruction model architecture
 
@@ -190,10 +190,10 @@ The classification folders referenced in step 2a contain multiple model files to
 We compare our overall competency scores to a number of uncertainty quantification (UQ) and out-of-distribution (OOD) detection methods, which are implemented in `src/comparison/overall/methods.py`. We can collect results for each method individually using the evaluate script in that same folder:
 
 ```
-python src/comparison/overall/evaluate.py parce --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/reconstruct/ --save_file results/<dataset>/competency/unmodified/data/parce.csv
+python src/comparison/overall/evaluate.py parce --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/reconstruct/ --data_file results/<dataset>/unmodified/data/parce.csv
 ```
 
-In the command above, you can replace `parce` with each of the available methods (softmax, temperature, dropout, ensemble, energy, odin, openmax, dice, kl, mahalanobis, and knn) and select the CSV file where you would like to save the results for the particular method. The argument test_data is used to indicate which dataset should be used for evaluation, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained reconstruction model was saved. You can optionally use the use_gpu flag to run evaluations on your GPU. Note that when evaluating the ensemble method, you will need to specify the model_dir that contains all of the model path files for the ensemble. This command will save a CSV file of results to the file indicated by the save_file argument. You can also specify a file to save/load trained estimators using the estimator_file argument.
+In the command above, you can replace `parce` with each of the available methods (softmax, temperature, dropout, ensemble, energy, odin, openmax, dice, kl, mahalanobis, and knn) and select the CSV file where you would like to save the results for the particular method. The argument test_data is used to indicate which dataset should be used for evaluation, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained reconstruction model was saved. Note that when evaluating the ensemble method, you will need to specify the model_dir that contains all of the model path files for the ensemble. This command will save a CSV file of results to the file indicated by the save_file argument. You can also specify a file to save/load trained estimators using the estimator_file argument.
 
 To run the evaluations for all of the existing UQ and OOD detection methods, you can use the evaluation bash script in the comparison folder:
 
@@ -201,14 +201,14 @@ To run the evaluations for all of the existing UQ and OOD detection methods, you
 ./src/comparison/overall/evaluate.sh <dataset>
 ```
 
-Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/comparison/overall/evaluate.sh`. This script will save a CSV file for all currentlly implemented methods to a folder called `results/<dataset>/competency/unmodified/data/`.
+Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/comparison/overall/evaluate.sh`. This script will take several minutes to run. It will save a CSV file for all currentlly implemented methods to a folder called `results/<dataset>/unmodified/data/`.
 
 ### 4c. Compare competency methods for manually collected data
 
 After running evaluations for all of the existing UQ and OOD detection methods, you can compare them using the compare script in the overall comparison folder:
 
 ```
-python src/comparison/overall/compare.py --data_dir results/<dataset>/competency/unmodified/data/ --plot_dir results/<dataset>/competency/unmodified/plots/
+python src/comparison/overall/compare.py --data_dir results/<dataset>/unmodified/data/ --plot_dir results/<dataset>/unmodified/plots/
 ```
 
 You should specify the `data_dir` where your evaluations were saved in the previous step and the `plot_dir`, where you want the generated plots to be saved. This command will pull all of the CSV files from the given folder, read the results, calculate a number of performance metrics for each method, print a table comparing the methods to the terminal, and save the same table to a CSV file. It will also save figures of the score distributions for each method to the provided folder, along with ROC curves.
@@ -218,10 +218,10 @@ You should specify the `data_dir` where your evaluations were saved in the previ
 You can change various images properties of the in-distribution validation set and evaluate the impact on prediction accuracy and competency estimates using the `evaluate` script in the analysis folder:
 
 ```
-python src/analysis/evaluate.py --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/reconstruct/ --property <property> --factor <factor> --data_dir results/<dataset>/competency/modified/data/
+python src/analysis/evaluate.py --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/reconstruct/ --property <property> --factor <factor> --data_dir results/<dataset>/modified/data/
 ```
 
-The argument test_data is used to indicate which dataset should be used to evaluate the overall competency estimator, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained reconstruction model was saved. You should specify the image property you wish to change and the corresponding factor. In our results, we modify the following properties: saturation, contrast, brightness, noise, and pixelate. You can optionally use the use_gpu flag if you want to evaluate your model using a GPU. This script with save classification model outputs and competency estimates to a pickle file called `<factor>.p` to the folder `<data_dir>/<property>.`
+The argument test_data is used to indicate which dataset should be used to evaluate the overall competency estimator, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained reconstruction model was saved. You should specify the image property you wish to change and the corresponding factor. In our results, we modify the following properties: saturation, contrast, brightness, noise, and pixelate. This script with save classification model outputs and competency estimates to a pickle file called `<factor>.p` to the folder `<data_dir>/<property>.`
 
 To run this script for various image properties and factors, you can use the evaluation bash script in the `analysis` folder:
 
@@ -229,14 +229,14 @@ To run this script for various image properties and factors, you can use the eva
 ./src/analysis/evaluate.sh <dataset>
 ```
 
-Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/analysis/evaluate.sh`. This script will create subfolders within a folder called `results/<dataset>/data` for each image property and generate a pickle file corresponding to each image property factor.
+Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/analysis/evaluate.sh`. This script can take hours to run depending on your machine. It will create subfolders within a folder called `results/<dataset>/modified/data` for each image property and generate a pickle file corresponding to each image property factor.
 
 ### 4e. Compare competency methods across image properties
 
 After running evaluations for all of the image modifications of interest, you can compare them using the compare script in the analysis folder:
 
 ```
-python src/analysis/compare.py --data_dir results/<dataset>/competency/modified/data/ --plot_dir results/<dataset>/competency/modified/plots/
+python src/analysis/compare.py --data_dir results/<dataset>/modified/data/ --plot_dir results/<dataset>/modified/plots/
 ```
 
 You should specify the `data_dir`, where your evaluations were saved in the previous step and the `plot_dir`, where you want the generated plots to be saved. This command will pull all of the pickle files from the given folder, read the results, calculate a number of performance metrics for each method, print a table comparing the methods to the terminal and save the same table to a CSV file. It will also save figures of the score distributions for each method to the provided folder, along with ROC curves.
@@ -245,7 +245,7 @@ You should specify the `data_dir`, where your evaluations were saved in the prev
 
 ### 5a. Download the regional competency model files
 
-If you have not done so already, download the [lunar](https://zenodo.org/records/14117660?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjQ0ZjA3Yjc3LTkyOTEtNDU0Yi05YjkzLWU0M2JkZjUxYTEyZSIsImRhdGEiOnt9LCJyYW5kb20iOiIxMTYwOTY0NmEzY2UyOWE2MTUxMGMxNzIyNDliNzhmYiJ9.AEOqTQwzStDNwMVXWAiImxCXGvuOy3CNmgWoEGW3rlA7uSsSd2wFNkYrc4flVHDvcmrKLimaURupmd26DzaZPA), [speed](https://zenodo.org/records/14117780?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjlhNGQ1ZmZhLWU4YzEtNDU4OS05NGFlLTk4MDZmYzY0ODZiNSIsImRhdGEiOnt9LCJyYW5kb20iOiJjZGFmMTA3MTA0YTFjODQ4ZjAxYTM0MTc1ZWJkMmRkMSJ9.T_jsMnKIgQOKSxsfluK9Qmo3L6jBHpS-KtiLV8SoFTMbUngVpoEF-BwkXyHD_wOZeiN-zr1h3fURQobbmD8kMA), and [pavilion](https://zenodo.org/records/14117974?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImUyNGM4YThhLTM2YjktNDY3Mi1iMjJmLTBlZTJlZmVhNWM1NyIsImRhdGEiOnt9LCJyYW5kb20iOiJmY2ViYjA0NGQ2Y2NmZDc4MmY5MTkyMzU0OGRkMmVkMiJ9.KoR-d-bJKfyRW0bEyEC5bdrmKwCfyHGEKDtFnbQx-QTBON_AV7_hQ2AKFnkflyWpqOiRkBb8-mWzjvsMYbROfQ) models through the provided links. Create a folder called `models` in the main directory (`parce`) and unzip each of the downloaded files in this folder. You should have three subfolders (`lunar`, `speed`, and `pavilion`) that each contain three zip files (`classify.zip`, `reconstruct.zip`, and `inpaint.zip`). For this step, you need the files provided in `inpaint.zip`. The trained regional competency estimators used in the paper are contained in the inpainting folders, along with labels for the segmented OOD datasets provided. If you want to modify the configurations to train new models, go through the remaining steps in this section. To evaluate the inpainting model, see substep 5e. To evaluate the regional competency estimator, see 5h. To visualize examples of regional model competency maps, see substep 5i. Otherwise, you can skip to step 6. 
+If you have not done so already, download the [lunar](https://zenodo.org/records/14117660?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjQ0ZjA3Yjc3LTkyOTEtNDU0Yi05YjkzLWU0M2JkZjUxYTEyZSIsImRhdGEiOnt9LCJyYW5kb20iOiIxMTYwOTY0NmEzY2UyOWE2MTUxMGMxNzIyNDliNzhmYiJ9.AEOqTQwzStDNwMVXWAiImxCXGvuOy3CNmgWoEGW3rlA7uSsSd2wFNkYrc4flVHDvcmrKLimaURupmd26DzaZPA), [speed](https://zenodo.org/records/14117780?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjlhNGQ1ZmZhLWU4YzEtNDU4OS05NGFlLTk4MDZmYzY0ODZiNSIsImRhdGEiOnt9LCJyYW5kb20iOiJjZGFmMTA3MTA0YTFjODQ4ZjAxYTM0MTc1ZWJkMmRkMSJ9.T_jsMnKIgQOKSxsfluK9Qmo3L6jBHpS-KtiLV8SoFTMbUngVpoEF-BwkXyHD_wOZeiN-zr1h3fURQobbmD8kMA), and [pavilion](https://zenodo.org/records/14117974?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6ImUyNGM4YThhLTM2YjktNDY3Mi1iMjJmLTBlZTJlZmVhNWM1NyIsImRhdGEiOnt9LCJyYW5kb20iOiJmY2ViYjA0NGQ2Y2NmZDc4MmY5MTkyMzU0OGRkMmVkMiJ9.KoR-d-bJKfyRW0bEyEC5bdrmKwCfyHGEKDtFnbQx-QTBON_AV7_hQ2AKFnkflyWpqOiRkBb8-mWzjvsMYbROfQ) models through the provided links. Create a folder called `models` in the main directory (`parce`) and unzip each of the downloaded files in this folder. You should have three subfolders (`lunar`, `speed`, and `pavilion`) that each contain three zip files (`classify.zip`, `reconstruct.zip`, and `inpaint.zip`). For this step, you need the files provided in `classify.zip` and `inpaint.zip`. The trained regional competency estimators used in the paper are contained in the inpainting folders, along with labels for the segmented OOD datasets provided. If you want to modify the configurations to train new models, go through the remaining steps in this section. To evaluate the inpainting model, see substep 5e. To evaluate the regional competency estimator, see 5h. To visualize examples of regional model competency maps, see substep 5i. Otherwise, you can skip to step 6. 
 
 ### 5b. Define the inpainting model architecture
 
@@ -322,10 +322,10 @@ The argument test_data is used to indicate which dataset should be used for visu
 We compare our regional competency scores to a number of anomaly detection and localization methods, which are implemented in `src/comparison/regional/methods.py`. We can collect results for each method individually using the evaluate script in that same folder:
 
 ```
-python src/comparison/regional/evaluate.py parce --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/inpaint/ --save_file results/<dataset>/competency/regional/data/parce.csv
+python src/comparison/regional/evaluate.py parce --test_data <dataset> --model_dir models/<dataset>/classify/ --decoder_dir models/<dataset>/inpaint/ --save_file results/<dataset>/regional/data/parce.csv
 ```
 
-In the command above, you can replace `parce` with each of the available methods (ganomaly, draem, fastflow, padim, patchcore, reverse, and stfpm) and select the CSV file where you would like to save the results for the particular method. The argument test_data is used to indicate which dataset should be used for evaluation, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained inpainting model was saved. You can optionally use the use_gpu flag to run evaluations on your GPU. This command will save a CSV file of results to the file indicated by the save_file argument. You can also specify a file to save/load trained estimators using the estimator_file argument.
+In the command above, you can replace `parce` with each of the available methods (ganomaly, draem, fastflow, padim, patchcore, reverse, and stfpm) and select the CSV file where you would like to save the results for the particular method. The argument test_data is used to indicate which dataset should be used for evaluation, which should be lunar, speed, or pavilion if you are using the default evaluation datasets. The argument model_dir is used to specify where your trained classification model was saved, and decoder_dir is used to specify where your trained inpainting model was saved. This command will save a CSV file of results to the file indicated by the save_file argument. You can also specify a file to save/load trained estimators using the estimator_file argument.
 
 To run the evaluations for all of the existing anomaly detection and localization methods, you can use the evaluation bash script in the comparison folder:
 
@@ -333,14 +333,14 @@ To run the evaluations for all of the existing anomaly detection and localizatio
 ./src/comparison/regional/evaluate.sh <dataset>
 ```
 
-Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/comparison/regional/evaluate.sh`. This script will save a CSV file for all currentlly implemented methods to a folder called `results/<dataset>/competency/regional/data/`.
+Note that you must ensure this script is executable on your machine. If it is not, you can use the command: `chmod +x ./src/comparison/regional/evaluate.sh`. This script may take several hours to run depending on your machine. It will save a CSV file for all currentlly implemented methods to a folder called `results/<dataset>/regional/data/`. If you have issues with the Anomalib library, you may need to downgrade the version of torchmetrics: `pip install torchmetrics==0.10.2` and upgrade anomalib: `pip install -U anomalib`.
 
 ### 6b. Compare competency methods for manually collected data
 
 After running evaluations for all of the existing anomaly detection and localization methods, you can compare them using the compare script in the regional comparison folder:
 
 ```
-python src/comparison/regional/compare.spy --data_dir results/<dataset>/competency/regional/data/ --plot_dir results/<dataset>/competency/regional/plots/ --decoder_dir models/<dataset>/inpaint/
+python src/comparison/regional/compare.py --data_dir results/<dataset>/regional/data/ --plot_dir results/<dataset>/regional/plots/ --decoder_dir models/<dataset>/inpaint/
 ```
 
 You should specify the `data_dir` where your evaluations were saved in the previous step and the `plot_dir`, where you want the generated plots to be saved. You should also provide the `decoder_dir`, where the OOD segment labels were saved, along with the `height` and `width` of the competency images (if they are not the default size). This command will pull all of the CSV files from the given folder, read the results, calculate a number of performance metrics for each method, print a table comparing the methods to the terminal, and save the same table to a CSV file. It will also save figures of the score distributions for each method to the provided folder, along with ROC curves.
@@ -349,7 +349,7 @@ You should specify the `data_dir` where your evaluations were saved in the previ
 
 You can also visualize the competency maps for each evaluated method using the visualize script:
 ```
-python src/comparison/regional/visualize.py --test_data <dataset> results/<dataset>/competency/regional/data --save_dir results/<dataset>/competency/regional/images/ --example <image_id>
+python src/comparison/regional/visualize.py --test_data <dataset> results/<dataset>/regional/data --save_dir results/<dataset>/regional/images/ --example <image_id>
 ```
 
 You should specify the dataset you're working with, the folder where all of the evaluation files are stored, the folder where visualizations of the compentency maps will be saved, and the example image of interest from the given dataset. This command will pull all of the data files from the given folder, visualize the generated competency maps for the selected example, and save the figures to the folder specified by save_dir.

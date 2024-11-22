@@ -108,7 +108,7 @@ def plot_comp_distributions(labels, outputs, competencies):
     # Plot the distribution of competency scores
     fig = plt.figure(figsize=(8, 6))
     sns.boxplot(data=[correct, incorrect], ax=plt.gca())
-    plt.gca().set_xticklabels(['Correctly Classifified', 'Misclassified'])
+    plt.gca().set_xticklabels(['Correctly Classified', 'Misclassified'])
     plt.xticks(fontsize=14)
     plt.yticks(fontsize=14)
     plt.ylabel('Competency Score', fontsize=14)

@@ -49,10 +49,10 @@ def main():
         data['Computation Time'].append(df['time'].mean())
 
         # Get scores of sets of samples
-        id_df = df.loc[df['ood'] == 0]
-        correct = id_df[id_df['pred'] == id_df['label']]['score']
-        incorrect = id_df[id_df['pred'] != id_df['label']]['score']
-        ood = df[df['ood'] == 1]['score']
+        id_df = df[df['ood'] == 0]
+        correct = id_df[id_df['pred'] == id_df['label']]['score'].to_numpy()
+        incorrect = id_df[id_df['pred'] != id_df['label']]['score'].to_numpy()
+        ood = df[df['ood'] == 1]['score'].to_numpy()
 
         # Replace NaN values with minimum
         min_value = np.minimum(np.minimum(np.nanmin(correct), np.nanmin(incorrect)), np.nanmin(ood))
@@ -60,10 +60,12 @@ def main():
         incorrect[np.isnan(incorrect)] = min_value
         ood[np.isnan(ood)] = min_value
 
+        print(np.shape(correct), np.shape(incorrect), np.shape(ood))
+
         # Plot score distributions
         fig, ax = plt.subplots()
         sns.boxplot(data=[correct, incorrect, ood], ax=ax)
-        ax.set_xticklabels(['Correctly Classifified', 'Misclassified', 'Out-of-Distribution'])
+        ax.set_xticklabels(['Correctly Classified', 'Misclassified', 'Out-of-Distribution'])
         plt.title('{} Competency Estimates'.format(filename.capitalize()))
         plt.ylabel('Competency Score')
         plt.savefig(os.path.join(distr_folder, '{}.png'.format(filename)))

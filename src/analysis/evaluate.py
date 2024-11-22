@@ -26,24 +26,19 @@ def main():
     parser.add_argument('--property', type=str, default='saturation')
     parser.add_argument('--factor', type=float, default='1.0')
     parser.add_argument('--data_dir', type=str, default='results/lunar/competency/modified/data/')
-    parser.add_argument('--use_gpu', action='store_true')
     args = parser.parse_args()
-
-    # Select device (CPU or GPU)
-    device = torch.device("cuda:0" if torch.cuda.is_available() and args.use_gpu else "cpu")
 
     # Load trained model
     with open(os.path.join(args.model_dir, 'layers.json')) as file:
         layer_args = json.load(file)
     model = NeuralNet(layer_args)
     model.load_state_dict(torch.load(os.path.join(args.model_dir, 'model.pth')))
-    model.to(device)
     model.eval()
 
     # Load trained competency estimators
     estimators = [load_estimator(method, model=model, model_dir=args.model_dir, 
-                               decoder_dir=args.decoder_dir, test_data=args.test_data, 
-                               device=device) for method in ALL_OVERALL]
+                               decoder_dir=args.decoder_dir, test_data=args.test_data) 
+                               for method in ALL_OVERALL]
     
     # Create data loader
     params = {'property': args.property, 'factor': args.factor}
@@ -62,7 +57,7 @@ def main():
         all_data['labels'].append(labels)
 
         # Get output from perception model
-        output = model(X.to(device)).detach().numpy()
+        output = model(X).detach().numpy()
         all_data['outputs'].append(output)
 
         # Estimate competency scores

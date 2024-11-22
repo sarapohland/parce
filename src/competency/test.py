@@ -113,13 +113,13 @@ def main():
 
         # Generate plots of loss distributions
         all_losses = [correct_losses, incorrect_losses, ood_losses]
-        all_labels = ['Correctly Classifified', 'Misclassified', 'Out-of-Distribution']
+        all_labels = ['Correctly Classified', 'Misclassified', 'Out-of-Distribution']
         file = os.path.join(args.decoder_dir, 'test_distributions.png')
         plot_distributions(all_losses, all_labels, file)
 
         # Generate plots of competency estimates
         all_scores = [correct_scores, incorrect_scores, ood_scores]
-        all_labels = ['Correctly Classifified', 'Misclassified', 'Out-of-Distribution']
+        all_labels = ['Correctly Classified', 'Misclassified', 'Out-of-Distribution']
         file = os.path.join(args.decoder_dir, 'test_competency_estimates.png')
         plot_competency(all_scores, all_labels, file)
 
