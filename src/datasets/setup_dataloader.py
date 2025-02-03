@@ -14,7 +14,7 @@ def get_class_names(data):
     elif data == 'speed':
         return ['speed limit 30', 'speed limit 50', 'speed limit 60', 'speed limit 70', 
                 'speed limit 80', 'speed limit 100', 'speed limit 120'] + ['speed limit 20']
-    elif data == 'pavilion':
+    elif data == 'park':
         return ['facing building', 'facing parking', 'facing pavilion', 'hitting tree', 
                 'middle area', 'open space 1', 'open space 2', 'wooded'] + ['pavilion']
     else:
@@ -25,7 +25,7 @@ def get_num_classes(data):
         return 8
     elif data == 'speed':
         return 7
-    elif data == 'pavilion':
+    elif data == 'park':
         return 8
     else:
         raise NotImplementedError('The {} dataset is not currently available.'.format(data))
@@ -41,7 +41,7 @@ def make_weights_for_balanced_classes(labels):
 
 def setup_loader(data, batch_size=None, train=False, val=False, test=False, ood=False, segment=None, modify=None, calibrate=None):
     
-    if not data in ['lunar', 'speed', 'pavilion']:
+    if not data in ['lunar', 'speed', 'park']:
         raise NotImplementedError('The {} dataset is not currently available.'.format(data))
     
     batch_size = 32 if batch_size is None else batch_size
