@@ -128,7 +128,7 @@ def main():
     properties = EVAL_MODIFICATIONS if args.property == 'all' else [args.property]
 
     # Set accuracy bin edges
-    if args.test_data == 'pavilion':
+    if args.test_data == 'park':
         bin_edges = np.array([1.0, 0.85, 0.5, 0.0])
     else:
         bin_edges = np.array([1.0, 0.9, 0.5, 0.0])
