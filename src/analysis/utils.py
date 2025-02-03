@@ -18,7 +18,7 @@ factors = {'lunar':
                     'noise': [], 
                     'pixelate': [], 
                 },
-            'pavilion':
+            'park':
                 {
                     'brightness': [0.0, 0.5, 1.5, 2.0, 2.5, 3.0], 
                     'contrast': [0.0, 0.5, 0.75, 1.5, 1.75, 2.0], 
