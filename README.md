@@ -27,7 +27,7 @@ pip install -e .
 
 ### 1a. Download the dataset files
 
-To replicate the results presented in the paper, download the [lunar](https://huggingface.co/datasets/sarapohland/lunar-navigation), [speed](https://huggingface.co/datasets/sarapohland/speed-limit-signs), and [park](https://huggingface.co/datasets/sarapohland/park-navigation) dataset files through the provided links. Create a folder called `data` in the main directory (`parce`) and add the downloaded files to this folder. You should have three subfolders (`lunar`, `speed`, and `park`) that each contain a dataset file called `dataset.npz`. If you simply want to use the default datasets, you can skip to step 2. If you want to create a new dataset, proceed through the remaining substeps in this section.
+To replicate the results presented in the paper, download the [lunar](https://huggingface.co/datasets/sarapohland/lunar-navigation), [speed](https://huggingface.co/datasets/sarapohland/speed-limit-signs), and [park](https://huggingface.co/datasets/sarapohland/park-navigation) dataset files through the provided links. Create a folder called `data` in the main directory (`parce`) and add the downloaded files to this folder. You should have three subfolders (`lunar`, `speed`, and `park`) that each contain a dataset file called `dataset.npz`. (If you want to perform regional competency estimation, you will also need the `ood_labels.p` files.) If you simply want to use the default datasets, you can skip to step 2. If you want to create a new dataset, proceed through the remaining substeps in this section.
 
 ### 1b. Set up directory structure
 
@@ -293,7 +293,7 @@ To evaluate the performance of the regional competency estimator, you should gen
 python src/utils/create_labels.py --test_data <dataset> --decoder_dir models/<dataset>/inpaint/
 ```
 
-Each image in the OOD set of the test_data dataset will be segmented, and you will be shown each segmented region with the prompt: "Does this segment contain a structure not present in the training set?" Answering yes (y) will indicate that this region is unfamiliar to the model, while answering no (n) will indicate that it is familiar. You can also answer that you are unsure (?). These responses will be saved to a pickle file called ood_labels.p in the decoder_dir directory. Note that you can also review these labels using the test flag and begin relabeling from the middle of the OOD set using the start_idx parameter.
+Each image in the OOD set of the test_data dataset will be segmented, and you will be shown each segmented region with the prompt: "Does this segment contain a structure not present in the training set?" Answering yes (y) will indicate that this region is unfamiliar to the model, while answering no (n) will indicate that it is familiar. You can also answer that you are unsure (?). These responses will be saved to a pickle file called ood_labels.p in the corresponding data folder. Note that you can also review these labels using the test flag and begin relabeling from the middle of the OOD set using the start_idx parameter.
 
 ### 5h. Evaluate the regional competency estimator 
 
@@ -340,7 +340,7 @@ Note that you must ensure this script is executable on your machine. If it is no
 After running evaluations for all of the existing anomaly detection and localization methods, you can compare them using the compare script in the regional comparison folder:
 
 ```
-python src/comparison/regional/compare.py --data_dir results/<dataset>/regional/data/ --plot_dir results/<dataset>/regional/plots/ --decoder_dir models/<dataset>/inpaint/
+python src/comparison/regional/compare.py --test_data <dataset> --data_dir results/<dataset>/regional/data/ --plot_dir results/<dataset>/regional/plots/ --decoder_dir models/<dataset>/inpaint/
 ```
 
 You should specify the `data_dir` where your evaluations were saved in the previous step and the `plot_dir`, where you want the generated plots to be saved. You should also provide the `decoder_dir`, where the OOD segment labels were saved, along with the `height` and `width` of the competency images (if they are not the default size). This command will pull all of the CSV files from the given folder, read the results, calculate a number of performance metrics for each method, print a table comparing the methods to the terminal, and save the same table to a CSV file. It will also save figures of the score distributions for each method to the provided folder, along with ROC curves.

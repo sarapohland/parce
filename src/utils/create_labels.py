@@ -84,7 +84,8 @@ def display_labels(data, true_regions):
 def main():
 
     # Load existing segmentation labels (if available)
-    save_file = os.path.join(args.decoder_dir, 'ood_labels.p')
+    data_folder = './data/{}/'.format(args.test_data)
+    save_file = os.path.join(data_folder, 'ood_labels.p')
     try:
         segmentation = pickle.load(open(save_file, 'rb'))
         seg_pixels = segmentation['pixels']
@@ -151,7 +152,8 @@ def main():
 def test():
 
     # Load true segmentation labels
-    save_file = os.path.join(args.decoder_dir, 'ood_labels.p')
+    data_folder = './data/{}/'.format(args.test_data)
+    save_file = os.path.join(data_folder, 'ood_labels.p')
     segmentation = pickle.load(open(save_file, 'rb'))
     seg_pixels = segmentation['pixels']
     seg_labels = segmentation['labels']

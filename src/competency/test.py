@@ -140,7 +140,9 @@ def main():
         id_losses, id_scores = np.hstack(id_losses), np.hstack(id_scores)
 
         # Load OOD segmentation labels
-        segmentation = pickle.load(open(os.path.join(args.decoder_dir, 'ood_labels.p'), 'rb'))
+        data_folder = './data/{}/'.format(args.test_data)
+        label_file = os.path.join(data_folder, 'ood_labels.p')
+        segmentation = pickle.load(open(label_file, 'rb'))
         seg_labels = segmentation['labels']
 
         # Collect data from OOD test set

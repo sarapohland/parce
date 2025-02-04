@@ -17,6 +17,7 @@ from src.datasets.setup_dataloader import setup_loader
 
 def main():
     parser = argparse.ArgumentParser('Parse configuration file')
+    parser.add_argument('--test_data', type=str, default='lunar')
     parser.add_argument('--decoder_dir', type=str, default='models/lunar/inpaint/')
     parser.add_argument('--data_dir', type=str, default='results/lunar/competency/regional/data/')
     parser.add_argument('--plot_dir', type=str, default='results/lunar/competency/regional/plots/')
@@ -42,7 +43,9 @@ def main():
             }
     
     # Load OOD segmentation labels
-    segmentation = pickle.load(open(os.path.join(args.decoder_dir, 'ood_labels.p'), 'rb'))
+    data_folder = './data/{}/'.format(args.test_data)
+    label_file = os.path.join(data_folder, 'ood_labels.p')
+    segmentation = pickle.load(open(label_file, 'rb'))
     seg_labels = segmentation['labels']
     seg_pixels = segmentation['pixels']
 
